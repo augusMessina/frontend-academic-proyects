@@ -212,8 +212,22 @@ function animate(){
         }
     })
 
-    invaderProjectiles.forEach(invaderProjectile => {
-        invaderProjectile.update()
+    invaderProjectiles.forEach((invaderProjectile, index) => {
+        if(invaderProjectile.position.y + invaderProjectile.height >= canvas.height){
+            setTimeout(() => {
+                setTimeout(() => {
+                    invaderProjectiles.splice(index, 1)
+                }, 0)
+            })
+        }else{
+            invaderProjectile.update()
+        }
+
+        if(invaderProjectile.position.y + invaderProjectile.height >= player.position.y &&
+            invaderProjectile.position.x + invaderProjectile.width >= player.position.x &&
+            invaderProjectile.position.x <= player.position.x + player.width){
+            console.log("You Lose")
+        }
     })
 
     grids.forEach((grid, indexGrid) => {
