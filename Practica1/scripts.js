@@ -1,4 +1,5 @@
 const canvas = document.querySelector('canvas')
+const scoreEl = document.querySelector('#scoreEl')
 const ctx = canvas.getContext('2d')
 
 canvas.width = window.innerWidth
@@ -10,6 +11,7 @@ class Player{
     constructor(){
         this.velocity = {x: 0, y: 0}
         this.rotation = 0
+        this.opacity = 1
 
         const image = new Image();
         image.src = 'img/cannon.png'
@@ -29,6 +31,7 @@ class Player{
         // ctx.fillRect(this.position.x, this.position.y, this.width, this.height) 
         
         ctx.save()
+        ctx.globalAlpha = this.opacity
         ctx.translate(player.position.x + player.width/2, player.position.y + player.height/2)
         ctx.rotate(this.rotation)
         ctx.translate(-player.position.x - player.width/2, -player.position.y - player.height/2)
@@ -108,7 +111,7 @@ class InvaderProjectile {
     }
 
     draw(){
-        ctx.fillStyle = 'white'
+        ctx.fillStyle = 'red'
         ctx.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 
@@ -224,7 +227,14 @@ const keys = {
 }
 
 let frames = 0
-let randomInterval = Math.floor((Math.random()*500) + 500)
+let randomInterval = Math.floor((Math.random()*750) + 500)
+
+let game = {
+    over: false,
+    active: true
+}
+
+let score = 0
 
 // create stars
 for(let i=0; i<100; i++){
@@ -262,6 +272,7 @@ function createParticles({object, color}){
 }
 
 function animate(){
+    if(!game.active) return
     requestAnimationFrame(animate)
     ctx.fillStyle = '#24283b'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -311,9 +322,14 @@ function animate(){
             invaderProjectile.position.x <= player.position.x + player.width){
             setTimeout(() => {
                 invaderProjectiles.splice(index, 1)
+                player.opacity = 0
+                game.over = true
             }, 0)
+            setTimeout(() => {
+                game.active = false
+            }, 2000)
             console.log("You Lose")
-            createParticles({object: player, color: 'white'})
+            createParticles({object: player, color: 'red'})
         }
     })
 
@@ -341,6 +357,8 @@ function animate(){
                         })
                         //remove invader and projectile
                         if(invaderFound && projectileFound){
+                            score += 100
+                            scoreEl.innerHTML = score
                             createParticles({object: invader, fade: true})
                             grid.invaders.splice(indexInv, 1)
                             projectiles.splice(indexPr, 1)
@@ -374,15 +392,18 @@ function animate(){
     //spawn enemies
     if(frames % randomInterval === 0){
         grids.push(new Grid())
-        randomInterval = Math.floor((Math.random()*500) + 500)
+        randomInterval = Math.floor((Math.random()*750) + 500)
         frames = 0
     }
 
     frames++
 }
+
 animate()
 
 addEventListener('keydown', ({key}) => {
+    if(game.over) return
+
     switch(key){
         case 'a':
             keys.a.pressed = true
@@ -391,16 +412,19 @@ addEventListener('keydown', ({key}) => {
             keys.d.pressed = true
             break
         case ' ':
-            projectiles.push(new Projectile({
-                position:{
-                    x: player.position.x + player.width/2,
-                    y: player.position.y
-                },
-                velocity:{
-                    x: 0,
-                    y: -15,
-                }
-            }))
+            if(keys.space.pressed === false){
+                projectiles.push(new Projectile({
+                    position:{
+                        x: player.position.x + player.width/2,
+                        y: player.position.y
+                    },
+                    velocity:{
+                        x: 0,
+                        y: -15,
+                    }
+                }))
+            }
+            keys.space.pressed = true
             break
     }
 })
@@ -414,6 +438,7 @@ addEventListener('keyup', ({key}) => {
             keys.d.pressed = false
             break
         case ' ':
+            keys.space.pressed = false
             break
     }
 })
