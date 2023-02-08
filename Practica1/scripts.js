@@ -10,6 +10,7 @@ const invaderWidth = 600 * invaderScale;
 class Player{
     constructor(){
         this.velocity = {x: 0, y: 0}
+        this.position = {x: 0, y: 0}
         this.rotation = 0
         this.opacity = 1
 
@@ -125,6 +126,7 @@ class InvaderProjectile {
 class Invader{
     constructor({position}){
         this.velocity = {x: 0, y: 0}
+        this.position = {x: 0, y: 0}
 
         const image = new Image();
         image.src = 'img/invader.png'
@@ -271,6 +273,20 @@ function createParticles({object, color}){
     }
 }
 
+function playerDead(){
+    if(player.opacity != 0){
+        console.log("You Lose")
+        createParticles({object: player, color: 'red'})
+        setTimeout(() => {
+            player.opacity = 0
+            game.over = true
+        }, 0)
+        setTimeout(() => {
+            game.active = false
+        }, 2000)
+    }
+}
+
 function animate(){
     if(!game.active) return
     requestAnimationFrame(animate)
@@ -322,27 +338,30 @@ function animate(){
             invaderProjectile.position.x <= player.position.x + player.width){
             setTimeout(() => {
                 invaderProjectiles.splice(index, 1)
-                player.opacity = 0
-                game.over = true
             }, 0)
-            setTimeout(() => {
-                game.active = false
-            }, 2000)
-            console.log("You Lose")
-            createParticles({object: player, color: 'red'})
+            playerDead()
         }
     })
 
     grids.forEach((grid, indexGrid) => {
         grid.update()
-        //spawn projectiles
+        //spawn enemy projectiles
         if(frames%100 === 0 && grid.invaders.length > 0){
             grid.invaders[Math.floor(Math.random()*grid.invaders.length)].shoot(invaderProjectiles)
         }
 
         grid.invaders.forEach((invader, indexInv) => {
             invader.update({velocity: grid.velocity})
-            // projectiles hit enemy
+
+            //enemy hits player
+            if(invader.position.y + invader.height >= player.position.y &&
+                invader.position.x + invader.width/2 >= player.position.x &&
+                invader.position.x - invader.width/2 <= player.position.x + player.width/2 &&
+                invader.position.y <= player.position.y + player.height){
+                    playerDead()
+                }
+
+            // player projectiles hit enemy
             projectiles.forEach((projectile, indexPr) => {
                 if(projectile.position.y - projectile.radius <= invader.position.y + invader.height &&
                     projectile.position.x + projectile.radius >= invader.position.x &&
