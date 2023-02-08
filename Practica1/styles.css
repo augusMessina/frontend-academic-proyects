@@ -1,15 +1,18 @@
 body{
     margin: 0;
-    background: #a9b1d6;
+    background: #323157;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .score{
-    position: fixed;
+    position: absolute;
     z-index: 10;
     color: white;
     left: 10px;
     top: 10px;
     margin: 0;
     font-family: 'Orbitron', sans-serif;
-    font-size: 20px;
+    font-size: 15px;
 }

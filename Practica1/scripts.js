@@ -2,9 +2,9 @@ const canvas = document.querySelector('canvas')
 const scoreEl = document.querySelector('#scoreEl')
 const ctx = canvas.getContext('2d')
 
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
-const invaderScale = 0.08
+canvas.width = 1280
+canvas.height = 720
+const invaderScale = 0.06
 const invaderWidth = 600 * invaderScale;
 
 class Player{
@@ -16,7 +16,7 @@ class Player{
         const image = new Image();
         image.src = 'img/cannon.png'
         image.onload = () => {
-            const scale = 0.15
+            const scale = 0.12
             this.image = image
             this.width = image.width * scale
             this.height = image.height * scale
@@ -247,7 +247,7 @@ for(let i=0; i<100; i++){
             x: 0,
             y: 1
         },
-        radius: Math.random()*2,
+        radius: Math.random()*1,
         color: 'white',
         fade: false
     }))    
@@ -339,6 +339,7 @@ function animate(){
         if(frames%100 === 0 && grid.invaders.length > 0){
             grid.invaders[Math.floor(Math.random()*grid.invaders.length)].shoot(invaderProjectiles)
         }
+
         grid.invaders.forEach((invader, indexInv) => {
             invader.update({velocity: grid.velocity})
             // projectiles hit enemy
