@@ -5,9 +5,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
     <title>Space Invaders</title>
 </head>
-<div style="position: relative">
-    <p class="score">
-        <span>Score:</span> <span id="scoreEl">0</span></p>
-    <canvas></canvas>
+<div style="position: relative;">
+    <p id="gameOver">
+        <span>Game Over</span>
+    </p>
+    <p id="finalScore">
+        <span>Score: </span> <span id="finalScoreEl">0</span>
+    </p>
+    <div style="position: relative;">
+        <p id="score">
+            <span>Score:</span> <span id="scoreEl">0</span>
+        </p>
+        <canvas style="z-index: 1;"></canvas>
+    </div>
 </div>
+
 <script src="./scripts.js"></script>

@@ -6,7 +6,7 @@ body{
     align-items: center;
 }
 
-.score{
+#score{
     position: absolute;
     z-index: 10;
     color: white;
@@ -15,4 +15,36 @@ body{
     margin: 0;
     font-family: 'Orbitron', sans-serif;
     font-size: 15px;
+}
+
+#gameOver{
+    position: absolute;
+    float: left;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 80px;
+    font-weight: 400;
+    margin: 0;
+    opacity: 0;
+    z-index: 10;
+}
+
+#finalScore{
+    position: absolute;
+    float: left;
+    top: 57%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 50px;
+    font-weight: 400;
+    margin: 0;
+    opacity: 0;
+    z-index: 10;
 }
