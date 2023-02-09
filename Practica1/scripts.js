@@ -303,7 +303,7 @@ function playerDead(){
 }
 
 function animate(){
-    if(!game.active) return
+    //if(!game.active) return
     //requestAnimationFrame(animate)
     ctx.fillStyle = '#24283b'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -432,11 +432,14 @@ function animate(){
     }
 
     //spawn enemies
-    if(frames % randomInterval === 0){
-        grids.push(new Grid())
-        randomInterval = Math.floor((Math.random()*500) + 250)
-        frames = 0
+    if(game.active){
+        if(frames % randomInterval === 0){
+            grids.push(new Grid())
+            randomInterval = Math.floor((Math.random()*500) + 250)
+            frames = 0
+        }
     }
+    
 
     frames++
 }
