@@ -295,6 +295,7 @@ function playerDead(){
             document.getElementById('finalScoreEl').innerHTML = score
             document.getElementById('finalScore').style.opacity = 1
             document.getElementById('rstBtn').disabled = false
+            document.getElementById('rstBtn').style.cursor = 'pointer'
             document.getElementById('rstBtn').style.opacity = 1
         }, 2000)
         
@@ -496,6 +497,7 @@ document.getElementById('rstBtn').addEventListener("click", function(){
     document.getElementById('finalScore').style.opacity = 0
     document.getElementById('rstBtn').style.opacity = 0
     document.getElementById('rstBtn').disabled = true
+    document.getElementById('rstBtn').style.cursor = 'default'
     player.position.x = canvas.width/2 - player.width/2
     player.opacity = 1
     game.over = false

@@ -15,6 +15,7 @@ body{
     margin: 0;
     font-family: 'Orbitron', sans-serif;
     font-size: 15px;
+    cursor: default;
 }
 
 #gameOver{
@@ -31,6 +32,7 @@ body{
     margin: 0;
     opacity: 0;
     z-index: 10;
+    cursor: default;
 }
 
 #finalScore{
@@ -47,6 +49,8 @@ body{
     margin: 0;
     opacity: 0;
     z-index: 10;
+
+    cursor: default;
 }
 
 #rstBtn{
@@ -61,7 +65,6 @@ body{
     padding: 20px;
     transition: 0.3s;
 
-    cursor: pointer;
     font-family: 'Orbitron', sans-serif;
     font-size: 30px;
     font-weight: 400;
