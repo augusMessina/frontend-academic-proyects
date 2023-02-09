@@ -294,6 +294,8 @@ function playerDead(){
             document.getElementById('gameOver').style.opacity = 1
             document.getElementById('finalScoreEl').innerHTML = score
             document.getElementById('finalScore').style.opacity = 1
+            document.getElementById('rstBtn').disabled = false
+            document.getElementById('rstBtn').style.opacity = 1
         }, 2000)
         
     }
@@ -484,3 +486,19 @@ addEventListener('keyup', ({key}) => {
             break
     }
 })
+
+document.getElementById('rstBtn').addEventListener("click", function(){
+    document.getElementById('score').style.opacity = 1
+    score = 0
+    scoreEl.innerHTML = 0
+    frames = 0
+    document.getElementById('gameOver').style.opacity = 0
+    document.getElementById('finalScore').style.opacity = 0
+    document.getElementById('rstBtn').style.opacity = 0
+    document.getElementById('rstBtn').disabled = true
+    player.position.x = canvas.width/2 - player.width/2
+    player.opacity = 1
+    game.over = false
+    game.active = true
+    animate()
+});
