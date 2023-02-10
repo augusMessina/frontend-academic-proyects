@@ -2,12 +2,30 @@ const canvas = document.querySelector('canvas')
 const scoreEl = document.querySelector('#scoreEl')
 const ctx = canvas.getContext('2d')
 
-canvas.width = 1280
-canvas.height = 720
+if(window.innerHeight > 720 && window.innerWidth > 1280){
+    canvas.width = 1280
+    canvas.height = 720
+}else if(window.innerHeight >= window.innerWidth){
+    canvas.width = window.innerWidth
+    canvas.height = window.innerWidth*9/16 
+}else{
+    canvas.width = window.innerHeight*16/9
+    canvas.height = window.innerHeight
+}
+// canvas.width = 1280
+// canvas.height = 720
 
+document.getElementById('gameOver').style.fontSize = `${(canvas.width*80)/1280}px`
+document.getElementById('finalScore').style.fontSize = `${(canvas.width*50)/1280}px`
+document.getElementById('score').style.fontSize = `${(canvas.width*15)/1280}px`
+document.getElementById('rstBtn').style.fontSize = `${(canvas.width*30)/1280}px`
+document.getElementById('rstBtn').style.padding = `${(canvas.width*20)/1280}px`
+document.getElementById('rstBtn').style.borderRadius = `${(canvas.width*5)/1280}px`
 
-const invaderScale = 0.06
+const invaderScale = (canvas.height*0.06)/720
+const playerScale = (canvas.height*0.12)/720
 const invaderWidth = 600 * invaderScale;
+
 
 class Player{
     constructor(){
@@ -19,10 +37,10 @@ class Player{
         const image = new Image();
         image.src = 'img/cannon.png'
         image.onload = () => {
-            const scale = 0.12
+            //const scale = 0.12
             this.image = image
-            this.width = image.width * scale
-            this.height = image.height * scale
+            this.width = image.width * playerScale
+            this.height = image.height * playerScale
             this.position = {
                 x: canvas.width/2 - this.width/2,
                 y: canvas.height - this.height - 20}
@@ -53,7 +71,7 @@ class Projectile {
     constructor({position, velocity}){
         this.position = position
         this.velocity = velocity
-        this.radius = 3
+        this.radius = (canvas.width*3)/1280
     }
 
     draw(){
@@ -105,8 +123,8 @@ class InvaderProjectile {
     constructor({position, velocity}){
         this.position = position
         this.velocity = velocity
-        this.width = 3
-        this.height = 10
+        this.width = (canvas.width*3)/1280
+        this.height = (canvas.height*10)/720
     }
 
     draw(){
@@ -161,7 +179,7 @@ class Invader{
             },
             velocity:{
                 x: 0,
-                y: 6
+                y: (canvas.height*6)/720
             }
         }))
     }
@@ -174,8 +192,8 @@ class Grid {
             y: 0
         }
         this.velocity = {
-            x: 5,
-            y: 0.3
+            x: (canvas.width*5)/1080,
+            y: (canvas.height*0.3)/720
         }
 
         this.invaders = []
@@ -249,7 +267,7 @@ for(let i=0; i<100; i++){
             x: 0,
             y: 1
         },
-        radius: Math.random()*1,
+        radius: Math.random()*((canvas.width*1)/1280),
         color: 'white',
         fade: false
     }))    
@@ -267,7 +285,7 @@ function createParticles({object, color}){
                 x: (Math.random() - 0.5)*2,
                 y: (Math.random() - 0.5)*2
             },
-            radius: Math.random()*3,
+            radius: Math.random()*((canvas.width*3)/1280),
             color: color || 'yellow',
             fade: true
         }))    
@@ -308,7 +326,6 @@ function animate(){
     ctx.fillStyle = '#24283b'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-    player.update()
 
     // animate particles (explosions)
     particles.forEach((particle, index) => {
@@ -326,6 +343,8 @@ function animate(){
             particle.update()
         }
     })
+
+    player.update()
     
     // animate projectiles
     projectiles.forEach((projectile, index) => {
@@ -421,10 +440,10 @@ function animate(){
 
     // player movement 
     if(keys.a.pressed && player.position.x >= 0){
-        player.velocity.x = -7
+        player.velocity.x = -(canvas.width*7)/1280
         player.rotation = -0.15
     }else if(keys.d.pressed && player.position.x + player.width <= canvas.width){
-        player.velocity.x = 7
+        player.velocity.x = (canvas.width*7)/1280
         player.rotation = 0.15
     }else{
         player.velocity.x = 0
@@ -451,12 +470,14 @@ setInterval(function(){animate()}, 1000/45)
 
 addEventListener('keydown', ({key}) => {
     if(game.over) return
-
+    
     switch(key){
         case 'a':
+        case 'A':
             keys.a.pressed = true
             break
         case 'd':
+        case 'D':
             keys.d.pressed = true
             break
         case ' ':
@@ -468,7 +489,7 @@ addEventListener('keydown', ({key}) => {
                     },
                     velocity:{
                         x: 0,
-                        y: -15,
+                        y: -(canvas.height*15)/720,
                     }
                 }))
             }
@@ -480,9 +501,11 @@ addEventListener('keydown', ({key}) => {
 addEventListener('keyup', ({key}) => {
     switch(key){
         case 'a':
+        case 'A':
             keys.a.pressed = false
             break
         case 'd':
+        case 'D':
             keys.d.pressed = false
             break
         case ' ':
