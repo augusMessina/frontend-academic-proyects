@@ -4,6 +4,9 @@ const ctx = canvas.getContext('2d')
 
 var theme = document.getElementById("theme");
 var deadSound = document.getElementById("deadSound");
+deadSound.loop = false
+var shootSound = document.getElementById("shootSound");
+shootSound.loop = false
 
 if(window.innerHeight > 720 && window.innerWidth > 1280){
     canvas.width = 1280
@@ -303,10 +306,6 @@ function playerDead(){
         theme.currentTime = 0;
         deadSound.play();
         setTimeout(() => {
-            deadSound.pause()
-            deadSound.currentTime = 0;
-        }, 3500)
-        setTimeout(() => {
             player.opacity = 0
             game.over = true
         }, 0)
@@ -498,6 +497,8 @@ addEventListener('keydown', ({key}) => {
             break
         case ' ':
             if(keys.space.pressed === false){
+                shootSound.currentTime = 0.03
+                shootSound.play();
                 projectiles.push(new Projectile({
                     position:{
                         x: player.position.x + player.width/2,
