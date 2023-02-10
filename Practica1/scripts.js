@@ -2,6 +2,9 @@ const canvas = document.querySelector('canvas')
 const scoreEl = document.querySelector('#scoreEl')
 const ctx = canvas.getContext('2d')
 
+var theme = document.getElementById("theme");
+var deadSound = document.getElementById("deadSound");
+
 if(window.innerHeight > 720 && window.innerWidth > 1280){
     canvas.width = 1280
     canvas.height = 720
@@ -296,6 +299,13 @@ function playerDead(){
     if(player.opacity != 0){
         console.log("Game Over")
         createParticles({object: player, color: 'red'})
+        theme.pause()
+        theme.currentTime = 0;
+        deadSound.play();
+        setTimeout(() => {
+            deadSound.pause()
+            deadSound.currentTime = 0;
+        }, 3500)
         setTimeout(() => {
             player.opacity = 0
             game.over = true
@@ -319,6 +329,7 @@ function playerDead(){
         
     }
 }
+let songPlayed = false;
 
 function animate(){
     //if(!game.active) return
@@ -471,6 +482,11 @@ setInterval(function(){animate()}, 1000/45)
 addEventListener('keydown', ({key}) => {
     if(game.over) return
     
+    if(!songPlayed){
+        theme.play();
+        songPlayed = true
+    }
+
     switch(key){
         case 'a':
         case 'A':
@@ -519,6 +535,7 @@ document.getElementById('rstBtn').addEventListener("click", function(){
     score = 0
     scoreEl.innerHTML = 0
     frames = 0
+    songPlayed = false
     document.getElementById('gameOver').style.opacity = 0
     document.getElementById('finalScore').style.opacity = 0
     document.getElementById('rstBtn').style.opacity = 0
