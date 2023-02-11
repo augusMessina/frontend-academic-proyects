@@ -2,10 +2,13 @@ const canvas = document.querySelector('canvas')
 const scoreEl = document.querySelector('#scoreEl')
 const ctx = canvas.getContext('2d')
 
-var theme = document.getElementById("theme");
-var deadSound = document.getElementById("deadSound");
+const theme = document.getElementById("theme");
+theme.volume = 0.2
+const deadSound = document.getElementById("deadSound");
+deadSound.volume = 0.2
 deadSound.loop = false
-var shootSound = document.getElementById("shootSound");
+const shootSound = document.getElementById("shootSound");
+shootSound.volume = 0.2
 shootSound.loop = false
 
 if(window.innerHeight > 720 && window.innerWidth > 1280){
