@@ -1,0 +1,128 @@
+body{
+    margin: 0;
+    background: #323157;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+span{
+    text-align: center;
+}
+
+#score{
+    position: absolute;
+    z-index: 10;
+    color: white;
+    left: 10px;
+    top: 10px;
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 15px;
+    cursor: default;
+}
+
+.endText{
+    position: absolute;
+    white-space: nowrap;
+    float: left;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 80px;
+    font-weight: 400;
+    margin: 0;
+    opacity: 0;
+    z-index: 10;
+    cursor: default;
+}
+
+#finalScore{
+    position: absolute;
+    float: left;
+    top: 33%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 50px;
+    font-weight: 400;
+    margin: 0;
+    opacity: 0;
+    z-index: 10;
+
+    cursor: default;
+}
+
+#ldrBrd{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    position: absolute;
+    float: left;
+    top: 56%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: white;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 50px;
+    font-weight: 400;
+    margin: 0;
+    opacity: 0;
+    z-index: 9;
+
+    cursor: default;
+}
+
+
+input{
+    position: absolute;
+    float: left;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: transparent;
+    border: 5px solid white;
+    padding: 20px;
+
+    font-family: 'Orbitron', sans-serif;
+    font-size: 30px;
+    font-weight: 400;
+    color: white;
+    margin: 0;
+    opacity: 0;
+    z-index: 10;
+}
+
+button{
+    position: absolute;
+    float: left;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: transparent;
+    border: 5px solid white;
+    padding: 20px;
+    transition: 0.3s;
+
+    font-family: 'Orbitron', sans-serif;
+    font-size: 30px;
+    font-weight: 400;
+    color: white;
+    margin: 0;
+    opacity: 0;
+    z-index: 10;
+}
+
+button:hover{
+    background-color: white;
+    color: #24283b;
+}

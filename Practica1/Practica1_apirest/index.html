@@ -1,0 +1,43 @@
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+    <title>Space Invaders</title>
+</head>
+<div style="position: relative;">
+    <p id="gameOver" class="endText">
+        <span>Game Over</span>
+    </p>
+    <p id="newRecord" class="endText">
+        <span>NEW RECORD!</span>
+    </p>
+    <p id="finalScore">
+        <span>Score: </span> <span id="finalScoreEl">0</span>
+    </p>
+    <input type="text" placeholder="Enter your name" maxlength="15">
+    <button id="btnRecord">Save</button>
+    <div id="ldrBrd">
+        <span id="spanFirst">first</span>
+        <span id="spanSecond">second</span>
+        <span id="spanThird">third</span>
+    </div>
+    <button id="rstBtn">RESTART</button>
+    <div style="position: relative;">
+        <p id="score">
+            <span>Score:</span> <span id="scoreEl">0</span>
+        </p>
+        <canvas style="z-index: 1;"></canvas>
+    </div>
+</div>
+<audio id="theme" autoplay loop>
+    <source src="sounds/Intergalactic Odyssey.ogg"  type="audio/ogg">
+</audio>
+<audio id="deadSound" autoplay loop>
+    <source src="sounds/mixkit-retro-game-over-1947.wav"  type="audio/wav">
+</audio>
+<audio id="shootSound" autoplay loop>
+    <source src="sounds/Arcade Game Laser Shot Sound Effect.mp3"  type="audio/mp3">
+</audio>
+
+<script src="./scripts.js"></script>
