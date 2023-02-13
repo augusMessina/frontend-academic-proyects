@@ -34,15 +34,17 @@ document.getElementById('score').style.fontSize = `${(canvas.width*15)/1280}px`
 document.getElementById('rstBtn').style.fontSize = `${(canvas.width*30)/1280}px`
 document.getElementById('rstBtn').style.padding = `${(canvas.width*20)/1280}px`
 document.getElementById('rstBtn').style.borderRadius = `${(canvas.width*5)/1280}px`
+document.getElementById('rstBtn').disabled = true
 document.getElementById('btnRecord').style.fontSize = `${(canvas.width*30)/1280}px`
 document.getElementById('btnRecord').style.padding = `${(canvas.width*20)/1280}px`
 document.getElementById('btnRecord').style.borderRadius = `${(canvas.width*5)/1280}px`
+document.getElementById('btnRecord').disabled = true
 
 const invaderScale = (canvas.height*0.06)/720
 const playerScale = (canvas.height*0.12)/720
 const invaderWidth = 600 * invaderScale
 
-function showGameOver(){
+async function showGameOver(){
     document.getElementById('score').style.opacity = 0
     document.getElementById('newRecord').style.opacity = 0
     document.getElementById('gameOver').style.opacity = 1
@@ -50,15 +52,26 @@ function showGameOver(){
     document.getElementById('finalScore').style.opacity = 1
     document.getElementById('ldrBrd').style.opacity = 1
     document.querySelector('input').style.opacity = 0
+    document.querySelector('input').disabled = true
     document.getElementById('rstBtn').style.zIndex = 10
     document.getElementById('btnRecord').style.zIndex = 0
+    document.getElementById('btnRecord').disabled = true
     document.getElementById('rstBtn').disabled = false
     document.getElementById('rstBtn').style.cursor = 'pointer'
     document.getElementById('rstBtn').style.opacity = 1
-    fetch(`http://localhost:8000/records`).then(data => data.json()).then(records => {
-                document.getElementById('spanFirst').innerText = `1. ${records.first.name}: ${records.first.score}`
-                document.getElementById('spanSecond').innerText = `2. ${records.second.name}: ${records.second.score}`
-                document.getElementById('spanThird').innerText = `3. ${records.third.name}: ${records.third.score}`
+    await fetch(`http://localhost:8000/records`).then(data => data.json()).then(records => {
+                if(records.first.name != "")
+                    document.getElementById('spanFirst').innerText = `1. ${records.first.name}: ${records.first.score}`
+                else
+                    document.getElementById('spanFirst').innerText = ''
+                if(records.second.name != "")
+                    document.getElementById('spanSecond').innerText = `2. ${records.second.name}: ${records.second.score}`
+                else
+                    document.getElementById('spanSecond').innerText = ''
+                if(records.third.name != "")
+                    document.getElementById('spanThird').innerText = `3. ${records.third.name}: ${records.third.score}`
+                else
+                    document.getElementById('spanThird').innerText = ''
             })
 }
 
@@ -69,6 +82,7 @@ function showInputName(top){
     document.getElementById('finalScoreEl').innerHTML = score
     document.getElementById('finalScore').style.opacity = 1
     document.querySelector('input').style.opacity = 1
+    document.querySelector('input').disabled = false
     document.getElementById('rstBtn').style.zIndex = 0
     document.getElementById('btnRecord').style.zIndex = 10
     document.getElementById('btnRecord').disabled = false
@@ -361,10 +375,9 @@ function playerDead(){
             invaderProjectiles.length = 0
             projectiles.length = 0
         }, 1950)    
-        setTimeout(() => {
+        setTimeout(async () => {
             game.active = false
-            fetch(`http://localhost:8000/records`).then(data => data.json()).then(records => {
-                let checkRecord 
+            await fetch(`http://localhost:8000/records`).then(data => data.json()).then(records => {
                 if(score > records.first.score){
                     showInputName("1ST")
                     newTop = "first"
@@ -532,6 +545,13 @@ function animate(){
 setInterval(function(){animate()}, 1000/45)
 
 addEventListener('keydown', ({key}) => {
+    if(key === "Enter"){
+        if(document.getElementById('rstBtn').disabled === false){
+
+            document.getElementById('rstBtn').click()
+        }
+    }
+
     if(game.over) return
     
     if(!songPlayed){
@@ -607,10 +627,16 @@ document.getElementById('rstBtn').addEventListener("click", function(){
     animate()
 });
 
-document.getElementById('btnRecord').addEventListener("click", function(){
+document.getElementById('btnRecord').addEventListener("click", async function(){
     const name = document.querySelector('input')
-    fetch(`http://localhost:8000/put/${newTop}/${name.value}/${score}`, {method: 'POST'})
+    await fetch(`http://localhost:8000/put/${newTop}/${name.value}/${score}`, {method: 'POST'})
     name.value = ""
 
     showGameOver()
 });
+
+document.querySelector('input').addEventListener("keypress", ({key}) =>{
+    if(key === "Enter"){
+        document.getElementById('btnRecord').click()
+    }
+})

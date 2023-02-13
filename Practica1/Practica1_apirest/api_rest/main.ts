@@ -1,54 +1,68 @@
-//@ts-ignore
 import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
+import { MongoClient, ObjectId} from "https://deno.land/x/mongo@v0.31.1/mod.ts";
+
+const client = new MongoClient()
+//usuario: Augus, password: NebrijaAugus
+await client.connect(
+  `mongodb+srv://Augus:NebrijaAugus@cluster0.bffv5pw.mongodb.net/?authMechanism=SCRAM-SHA-1`,
+);
+
+export const db = client.database("Cluster0");
+export const recordsCollection = db.collection<ldrBoard>("LeaderBorad");
 
 const app = new Application();
 
 type Record = {
-    "name": string,
-    "score": number
+    name: string,
+    score: number
 }
-let objRecords = {
-  first: {
-    name: "",
-    score: 0
-  },
-  second: {
-    name: "",
-    score: 0
-  },
-  third: {
-    name: "",
-    score: 0
-  },
+type ldrBoard = {
+  _id?: ObjectId
+  first: Record,
+  second: Record,
+  third: Record
 }
 
 const router = new Router();
 router
-  .get("/records", (ctx) =>{
-    ctx.response.body = JSON.stringify(objRecords);
+  .get("/records", async (ctx) =>{
+    const ldrBoard: ldrBoard[] | undefined[] = await recordsCollection.find({}).toArray();
+    ctx.response.body = JSON.stringify(ldrBoard[0]);
   })
-  .post("/put/:top/:name/:score", async(ctx) =>{
+  .put("/reset", async (ctx) =>{
+    await recordsCollection.deleteMany({});
+    const ldrBoard: ldrBoard = {
+      first:{ name: "", score: 0 },
+      second:{ name: "", score: 0},
+      third:{ name: "", score: 0 }
+    }
+    await recordsCollection.insertOne(ldrBoard)
+    ctx.response.status = 202;
+  })
+  .post("/put/:top/:name/:score", async (ctx) =>{
     const {top, name, score} = ctx.params;
     
-    if(top === "first"){
-      objRecords.third.name = objRecords.second.name;
-      objRecords.third.score = objRecords.second.score;
-      objRecords.second.name = objRecords.first.name;
-      objRecords.second.score = objRecords.first.score;
-      objRecords.first = {name, score}
+    const ldrBoard: ldrBoard[] | undefined[] = await recordsCollection.find({}).toArray()
+    if(ldrBoard[0]){
+      if(top === "first"){
+        ldrBoard[0].third.name = ldrBoard[0].second.name;
+        ldrBoard[0].third.score = ldrBoard[0].second.score;
+        ldrBoard[0].second.name = ldrBoard[0].first.name;
+        ldrBoard[0].second.score = ldrBoard[0].first.score;
+        ldrBoard[0].first = {name, score}
 
-      ctx.response.status = 202
-    } else if(top === "second"){
-      objRecords.third.name = objRecords.second.name;
-      objRecords.third.score = objRecords.second.score;
-      objRecords.second = {name, score}
+      } else if(top === "second"){
+        ldrBoard[0].third.name = ldrBoard[0].second.name;
+        ldrBoard[0].third.score = ldrBoard[0].second.score;
+        ldrBoard[0].second = {name, score}
 
-      ctx.response.status = 202
-    } else if(top === "third"){
-      objRecords.third = {name, score}
-
-      ctx.response.status = 202
+      } else if(top === "third"){
+        ldrBoard[0].third = {name, score}
+      }
     }
+
+    await recordsCollection.replaceOne({}, ldrBoard[0])
+    ctx.response.status = 202
   })
 
 app.use(router.routes())

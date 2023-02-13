@@ -482,6 +482,12 @@ function animate(){
 setInterval(function(){animate()}, 1000/45)
 
 addEventListener('keydown', ({key}) => {
+    if(key === "Enter"){
+        if(document.getElementById('rstBtn').disabled === false){
+            document.getElementById('rstBtn').click()
+        }
+    }
+
     if(game.over) return
     
     if(!songPlayed){
@@ -492,10 +498,12 @@ addEventListener('keydown', ({key}) => {
     switch(key){
         case 'a':
         case 'A':
+        case 'ArrowLeft':
             keys.a.pressed = true
             break
         case 'd':
         case 'D':
+        case 'ArrowRight':
             keys.d.pressed = true
             break
         case ' ':
@@ -522,10 +530,12 @@ addEventListener('keyup', ({key}) => {
     switch(key){
         case 'a':
         case 'A':
+        case 'ArrowLeft':
             keys.a.pressed = false
             break
         case 'd':
         case 'D':
+        case 'ArrowRight':
             keys.d.pressed = false
             break
         case ' ':
