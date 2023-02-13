@@ -40,7 +40,7 @@ span{
     cursor: default;
 }
 
-#finalScore{
+.msg{
     position: absolute;
     float: left;
     top: 33%;
@@ -56,6 +56,13 @@ span{
     z-index: 10;
 
     cursor: default;
+}
+
+#errorMsg{
+    text-align:center;
+    top: 40%;
+    width: 70%;
+    font-size: 30px;
 }
 
 #ldrBrd{
@@ -120,6 +127,7 @@ button{
     margin: 0;
     opacity: 0;
     z-index: 10;
+    cursor: pointer;
 }
 
 button:hover{

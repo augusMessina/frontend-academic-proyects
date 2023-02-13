@@ -57,22 +57,26 @@ async function showGameOver(){
     document.getElementById('btnRecord').style.zIndex = 0
     document.getElementById('btnRecord').disabled = true
     document.getElementById('rstBtn').disabled = false
-    document.getElementById('rstBtn').style.cursor = 'pointer'
     document.getElementById('rstBtn').style.opacity = 1
-    await fetch(`http://localhost:8000/records`).then(data => data.json()).then(records => {
-                if(records.first.name != "")
-                    document.getElementById('spanFirst').innerText = `1. ${records.first.name}: ${records.first.score}`
-                else
-                    document.getElementById('spanFirst').innerText = ''
-                if(records.second.name != "")
-                    document.getElementById('spanSecond').innerText = `2. ${records.second.name}: ${records.second.score}`
-                else
-                    document.getElementById('spanSecond').innerText = ''
-                if(records.third.name != "")
-                    document.getElementById('spanThird').innerText = `3. ${records.third.name}: ${records.third.score}`
-                else
-                    document.getElementById('spanThird').innerText = ''
-            })
+    try{
+        await fetch(`http://localhost:8000/records`).then(data => data.json()).then(records => {
+                    if(records.first.name != "")
+                        document.getElementById('spanFirst').innerText = `1. ${records.first.name}: ${records.first.score}`
+                    else
+                        document.getElementById('spanFirst').innerText = ''
+                    if(records.second.name != "")
+                        document.getElementById('spanSecond').innerText = `2. ${records.second.name}: ${records.second.score}`
+                    else
+                        document.getElementById('spanSecond').innerText = ''
+                    if(records.third.name != "")
+                        document.getElementById('spanThird').innerText = `3. ${records.third.name}: ${records.third.score}`
+                    else
+                        document.getElementById('spanThird').innerText = ''
+                })
+    }catch(e){
+        console.log(e)
+        showError()
+    }
 }
 
 function showInputName(top){
@@ -83,14 +87,19 @@ function showInputName(top){
     document.getElementById('finalScore').style.opacity = 1
     document.querySelector('input').style.opacity = 1
     document.querySelector('input').disabled = false
+    document.querySelector('input').focus();
     document.getElementById('rstBtn').style.zIndex = 0
     document.getElementById('btnRecord').style.zIndex = 10
     document.getElementById('btnRecord').disabled = false
-    document.getElementById('btnRecord').style.cursor = 'pointer'
     document.getElementById('btnRecord').style.opacity = 1
 }
 
-
+function showError(){
+    document.getElementById('error').style.opacity = 1
+    document.getElementById('errorMsg').style.opacity = 1
+    document.getElementById('rstBtn').disabled = false
+    document.getElementById('rstBtn').style.opacity = 1
+}
 
 class Player{
     constructor(){
@@ -377,20 +386,25 @@ function playerDead(){
         }, 1950)    
         setTimeout(async () => {
             game.active = false
-            await fetch(`http://localhost:8000/records`).then(data => data.json()).then(records => {
-                if(score > records.first.score){
-                    showInputName("1ST")
-                    newTop = "first"
-                } else if(score > records.second.score){
-                    showInputName("2ND")
-                    newTop = "second"
-                } else if(score > records.third.score){
-                    showInputName("3RD")
-                    newTop = "third"
-                } else{
-                    showGameOver()
-                }
-            })
+            try{
+                await fetch(`http://localhost:8000/records`).then(data => data.json()).then(records => {
+                    if(score > records.first.score){
+                        showInputName("1ST")
+                        newTop = "first"
+                    } else if(score > records.second.score){
+                        showInputName("2ND")
+                        newTop = "second"
+                    } else if(score > records.third.score){
+                        showInputName("3RD")
+                        newTop = "third"
+                    } else{
+                        showGameOver()
+                    }
+                })
+            }catch(e){
+                console.log(e)
+                showError()
+            }
         }, 2000)
     }
 }
@@ -619,7 +633,8 @@ document.getElementById('rstBtn').addEventListener("click", function(){
     document.getElementById('ldrBrd').style.opacity = 0
     document.getElementById('rstBtn').style.opacity = 0
     document.getElementById('rstBtn').disabled = true
-    document.getElementById('rstBtn').style.cursor = 'default'
+    document.getElementById('error').style.opacity = 0
+    document.getElementById('errorMsg').style.opacity = 0
     player.position.x = canvas.width/2 - player.width/2
     player.opacity = 1
     game.over = false
@@ -629,7 +644,13 @@ document.getElementById('rstBtn').addEventListener("click", function(){
 
 document.getElementById('btnRecord').addEventListener("click", async function(){
     const name = document.querySelector('input')
-    await fetch(`http://localhost:8000/put/${newTop}/${name.value}/${score}`, {method: 'POST'})
+    try{
+        await fetch(`http://localhost:8000/put/${newTop}/${name.value}/${score}`, {method: 'POST'})
+    }catch(e){
+        console.log(e)
+        showError()
+    }
+    
     name.value = ""
 
     showGameOver()
