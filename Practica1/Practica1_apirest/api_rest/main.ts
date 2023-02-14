@@ -1,5 +1,6 @@
 import { Application, Router } from "https://deno.land/x/oak@v11.1.0/mod.ts";
 import { MongoClient, ObjectId} from "https://deno.land/x/mongo@v0.31.1/mod.ts";
+import { getQuery } from "https://deno.land/x/oak@v11.1.0/helpers.ts";
 
 const client = new MongoClient()
 //usuario: Augus, password: NebrijaAugus
@@ -27,9 +28,15 @@ const router = new Router();
 router
   .get("/records", async (ctx) =>{
     const ldrBoard: ldrBoard[] | undefined[] = await recordsCollection.find({}).toArray();
-    ctx.response.body = JSON.stringify(ldrBoard[0]);
+    ctx.response.body = ldrBoard[0];
   })
   .put("/reset", async (ctx) =>{
+    const value = getQuery(ctx, { mergeParams: true });
+    if(value?.pswrd != "porfadejamesoyyo"){
+      ctx.response.body = "Nice try but wrong password."
+      ctx.response.status = 401
+      return
+    }
     await recordsCollection.deleteMany({});
     const ldrBoard: ldrBoard = {
       first:{ name: "", score: 0 },
