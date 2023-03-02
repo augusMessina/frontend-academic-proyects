@@ -12,7 +12,7 @@ button{
   font-size: 18px;
 }
 
-.menu{
+/* .menu{
   display: flex;
   flex-direction: column;
   gap: 100px;
@@ -52,4 +52,4 @@ button{
   flex-direction: row;
   align-self: center;
   gap: 10px;
-}
+} */

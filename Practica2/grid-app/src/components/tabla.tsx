@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
-import styled from "styled-components";
+import { useState } from "react";
+import Image from "next/image";
+import { isValidNif } from "nif-dni-nie-cif-validation";
+import { GridItem, RemoveRowButton, ColumnName, InputsDiv, Menu, Wrapper, AddRowsDiv, ErrorMessage } from "../styles/myStyledComponents";
 
 const Tabla = () => {
     type Row = {
@@ -7,43 +9,45 @@ const Tabla = () => {
         DNI: string
     }
     const [rows, setRows] = useState<Row[]>([]);
-    const [rowsModified, setRowsModified] = useState<boolean>(false);
-
     const [Nombre, setNombre] = useState<string>("");
     const [DNI, setDNI] = useState<string>("");
+    const [ErrorNombre, setErrorNombre] = useState<string>("");
+    const [ErrorDNI, setErrorDNI] = useState<string>("");
 
     function addRow(){
         if(Nombre!="" && DNI!=""){
-            setRows([...rows, {nombre: Nombre, DNI: DNI}]);
-            setNombre("");
-            setDNI("");
+            if(!(isValidNif(DNI))){
+                setErrorDNI("El número de identificación no es válido. Se acepta NIF, DNI, NIE.")
+            } else {
+                setErrorDNI("");
+            }
+            
+            
+            if (!(/^[A-Za-z\s]*$/.test(Nombre))){
+                setErrorNombre("El nombre solo puede contener letras y espacios.")
+            } else {
+                setErrorNombre("");
+            }
+            
+            if(isValidNif(DNI) && (/^[A-Za-z\s]*$/.test(Nombre))) {
+                setRows([...rows, {nombre: Nombre, DNI: DNI}]);
+                setNombre("");
+                setDNI("");
+                setErrorNombre("");
+            }
         }
     }
 
-    function removeRow(row: number){
-        setRows(rows.splice(row, 1));
-    }
-
-    function addRowToGrid(){
-        if(rowsModified===true){
-            setRowsModified(false);
-            return(
-                rows.map(row => (
-                    <>
-                        <div className="gridItem">{row.nombre}</div>
-                        <div className="gridItem">{row.DNI}</div>
-                    </>
-                )) 
-            )
-        }
-    }
 
     return(
         <>
-        <div className='menu'>
-            <div className="wrapper">
-                <p className="rowName">NOMBRE</p>
-                <p className="rowName">DNI</p>
+        <Menu>
+            <Wrapper>
+                {/* <p className="rowName">NOMBRE</p>
+                <p className="rowName">DNI</p> */}
+
+                <ColumnName>NOMBRE</ColumnName>
+                <ColumnName>DNI</ColumnName>
 
                 {
                     rows.map((row, index) => (
@@ -51,55 +55,33 @@ const Tabla = () => {
                             <GridItem row={index+2}>{row.nombre}</GridItem>
                             <GridItem row={index+2}>{row.DNI}</GridItem>
                             <RemoveRowButton row={index+2} onClick={() => {
-                                let newRows = rows.filter((row, i) => !(i===index));
-                                setRows(newRows);}}>X</RemoveRowButton>
+                                setRows(rows.filter((row, i) => !(i===index)));}}>
+                                <Image width={20} height={20} src="/trash.png" alt=""></Image>
+
+                            </RemoveRowButton>
                         </>
                     )) 
                 }
   
-            </div>
-            <div className="addRowDiv">
-                <input placeholder="Nombre" value={Nombre} onChange={(e) => setNombre(e.target.value)}></input>
-                <input placeholder="DNI" value={DNI} onChange={(e) => setDNI(e.target.value)}></input>
-                <button onClick={()=>addRow()}>Añadir</button>
-            </div>
-        </div>
+            </Wrapper>
+            <AddRowsDiv>
+                <InputsDiv>
+                    <input placeholder="Nombre" value={Nombre} onChange={(e) => setNombre(e.target.value)}></input>
+                    <input placeholder="DNI" value={DNI} onChange={(e) => setDNI(e.target.value)}></input>
+                    <button onClick={()=>addRow()}>Añadir</button>
+                </InputsDiv>
+                {
+                    (ErrorNombre!="") && <ErrorMessage>{ErrorNombre}</ErrorMessage>
+                }
+                {
+                    (ErrorDNI!="") && <ErrorMessage>{ErrorDNI}</ErrorMessage>
+                }
+            </AddRowsDiv>
+            
+        </Menu>
         </>
         
     )
 }
-
-// const AddRowDiv = styled.div`
-//     display: flex;
-//     flex-direction: row;
-//     align-self: center;
-// `;
-
-type RowProps = {
-    row: number
-}
-
-const GridItem = styled.p<RowProps>`
-    grid-row: ${(props) => props.row};
-    border: 1px solid blue;
-    text-align: center;
-    padding: 15px;
-    margin: 0;
-`;
-
-const RemoveRowButton = styled.button<RowProps>`
-    grid-row: ${(props) => props.row};
-    border: 2px solid red;
-    background: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-    &:hover {
-        background: red;
-        color: white;
-    }
-`;
-
-
 
 export default Tabla;

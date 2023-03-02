@@ -1,13 +1,13 @@
-import Tabla from '@/components/tabla'
+
+import Link from 'next/link'
 
 export default function Home() {
 
   return (
    <>
-   <div className='menu'>
-      <Tabla></Tabla>
-      {/* <AddRow></AddRow> */}
-   </div>
+      <h1>Go to <Link href={"http://localhost:3000/table"}>TABLE</Link>
+      </h1>
+      
    </>
   )
 }
