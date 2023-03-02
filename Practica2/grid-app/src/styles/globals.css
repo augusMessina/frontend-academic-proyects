@@ -1,0 +1,55 @@
+p{
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+input{
+  padding: 20px;
+  font-size: 18px;
+}
+
+button{
+  padding: 20px;
+  font-size: 18px;
+}
+
+.menu{
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
+
+.wrapper {
+  margin-left: 100px;
+  margin-right: 100px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 5px;
+  grid-auto-rows: minmax(30px, auto);
+  border: 5px solid black;
+  padding: 10px;
+}
+
+.rowName{
+  grid-column: auto;
+  grid-row: 1;
+  border: 5px solid blue;
+  text-align: center;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.gridItem{
+  border: 1px solid blue;
+  text-align: center;
+  padding: 15px;
+  margin: 0;
+}
+
+.addRowDiv{
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  gap: 10px;
+}
