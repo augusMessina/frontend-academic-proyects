@@ -16,19 +16,24 @@ const Tabla = () => {
 
     function addRow(){
         if(Nombre!="" && DNI!=""){
+            // si el DNI no es válido, setErrorDNI
+
             if(!(isValidNif(DNI))){
                 setErrorDNI("El número de identificación no es válido. Se acepta NIF, DNI, NIE.")
             } else {
                 setErrorDNI("");
             }
             
-            
+            // si el nombre no es válido, setErrorNombre
+    
             if (!(/^[A-Za-z\s]*$/.test(Nombre))){
                 setErrorNombre("El nombre solo puede contener letras y espacios.")
             } else {
                 setErrorNombre("");
             }
             
+            // si todo está OK, setRows
+
             if(isValidNif(DNI) && (/^[A-Za-z\s]*$/.test(Nombre))) {
                 setRows([...rows, {nombre: Nombre, DNI: DNI}]);
                 setNombre("");
