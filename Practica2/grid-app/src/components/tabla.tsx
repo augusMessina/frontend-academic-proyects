@@ -19,7 +19,7 @@ const Tabla = () => {
             // si el DNI no es válido, setErrorDNI
 
             if(!(isValidNif(DNI))){
-                setErrorDNI("El número de identificación no es válido. Se acepta NIF, DNI, NIE.")
+                setErrorDNI("El número de identificación no es válido. Se acepta NIF, DNI, NIE. Por ejemplo: 57655929N, K0867756N, Z9332057L, A07727886")
             } else {
                 setErrorDNI("");
             }
