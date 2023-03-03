@@ -1,4 +1,3 @@
-import { replaceNieLetter } from "nif-dni-nie-cif-validation";
 import styled from "styled-components";
 
 type RowProps = {
@@ -17,7 +16,6 @@ export const Menu = styled.div`
 `;
 
 export const Wrapper = styled.div<WrapProps>`
-    
     margin-left: 100px;
     margin-right: 100px;
     display: grid;
@@ -104,6 +102,7 @@ export const RemoveColumnButton = styled.button`
     font-weight: 600;
     cursor: pointer;
     transition: 0.3s;
+    font-weight: 600;
     &:hover {
         background: red;
         color: white;
