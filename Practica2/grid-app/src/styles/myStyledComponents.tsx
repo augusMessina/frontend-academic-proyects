@@ -1,7 +1,13 @@
+import { replaceNieLetter } from "nif-dni-nie-cif-validation";
 import styled from "styled-components";
 
 type RowProps = {
-    row: number
+    row: number,
+    column?: number
+}
+
+type WrapProps = {
+    columns: number,
 }
 
 export const Menu = styled.div`
@@ -10,11 +16,12 @@ export const Menu = styled.div`
     gap: 100px;
 `;
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<WrapProps>`
+    
     margin-left: 100px;
     margin-right: 100px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: ${(props) => `repeat(${props.columns}, 1fr)`};
     grid-gap: 5px;
     grid-auto-rows: minmax(30px, auto);
     border: 5px solid black;
@@ -31,13 +38,21 @@ export const GridItem = styled.p<RowProps>`
     font-size: 18px;
 `;
 
-export const ColumnName = styled.p`
+export const ColumnDiv = styled.div`
+    display: flex;
+    justify-content: center;
     border: 5px solid blue;
-    text-align: center;
     padding: 20px;
+    margin: 0;
+`;
+
+export const ColumnName = styled.input`
+    padding: 0; 
+    text-align: center;
+    margin: 0;
     font-size: 20px;
     font-weight: 600;
-    margin: 0;
+    border: none;
 `;
 
 export const AddRowsDiv = styled.div`
@@ -57,6 +72,33 @@ export const InputsDiv = styled.div`
 
 export const RemoveRowButton = styled.button<RowProps>`
     grid-row: ${(props) => props.row};
+    grid-column: ${(props) => props.column};
+    border: 2px solid red;
+    background-image: "/trash.png";
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+        background: red;
+        color: white;
+    }
+`;
+
+export const AddColumnButton = styled.button<RowProps>`
+    grid-row: ${(props) => props.row};
+    grid-column: ${(props) => props.column};
+    border: 2px solid green;
+    background-image: "/trash.png";
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+        background: green;
+        color: white;
+    }
+`;
+
+export const RemoveColumnButton = styled.button`
     border: 2px solid red;
     background-image: "/trash.png";
     font-weight: 600;
