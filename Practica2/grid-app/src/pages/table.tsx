@@ -3,10 +3,7 @@ import Tabla from "@/components/tabla";
 const showTable = () => {
     return (
         <>
-        <div className='menu'>
-           <Tabla></Tabla>
-
-        </div>
+        <Tabla></Tabla>
         </>
        )
 }
