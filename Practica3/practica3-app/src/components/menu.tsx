@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MainMenu, PlanetsMenu } from "@/styles/myStyledComponents";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import LoadingIcon from "./loadingIcon";
 
 type PageProps = {
     planets: {name: string, id: string}[],
@@ -36,7 +37,7 @@ const Menu = (props: PageProps) => {
         {
             loading ? (
                 <>
-                    <h1>Cargando...</h1>
+                    <LoadingIcon></LoadingIcon>
                 </>
             ) :
             (

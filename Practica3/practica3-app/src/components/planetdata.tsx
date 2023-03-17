@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { isNamespaceExport } from "typescript";
 import { MainMenu, PlanetsMenu } from "@/styles/myStyledComponents";
 import { useRouter } from "next/router";
+import LoadingIcon from "./loadingIcon";
 
 
 type PlanetProps = {
@@ -81,7 +80,7 @@ const PlanetData = () => {
             {
                 (data.name === "" || loading) ? (
                     <>
-                        <h1>Cargando...</h1>
+                        <LoadingIcon></LoadingIcon>
                     </>
                 ) : (
                     <>
