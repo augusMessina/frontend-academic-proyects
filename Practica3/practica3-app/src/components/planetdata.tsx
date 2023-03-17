@@ -43,13 +43,13 @@ const PlanetData = () => {
         const res = await fetch(`https://swapi.dev/api/planets/${window.location.pathname.split("/")[2]}/`);
         const json = await res.json();
         
-        json.residents = await Promise.all(json.residents.map(async (residentURL: any) => {
+        json.residents = await Promise.all(json.residents.map(async (residentURL: string) => {
             const res = await fetch(residentURL);
             const json = await res.json();
             return json.name;
         }))
 
-        json.films = await Promise.all(json.films.map(async (filmURL: any) => {
+        json.films = await Promise.all(json.films.map(async (filmURL: string) => {
             const res = await fetch(filmURL);
             const json = await res.json();
             return json.title;
@@ -61,8 +61,8 @@ const PlanetData = () => {
     useEffect(() => {fetchPlanetData()}, []);
 
     useEffect(() => {
-        const handleStart = (url:any) => (url !== router.asPath) && setLoading(true);
-        const handleComplete = (url:any) => (url === router.asPath) && setLoading(false);
+        const handleStart = (url:string) => (url !== router.asPath) && setLoading(true);
+        const handleComplete = (url:string) => (url === router.asPath) && setLoading(false);
 
         router.events.on('routeChangeStart', handleStart)
         router.events.on('routeChangeComplete', handleComplete)

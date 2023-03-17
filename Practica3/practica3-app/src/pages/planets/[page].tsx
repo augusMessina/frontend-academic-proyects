@@ -4,12 +4,14 @@ type ServerSideProps = {
     params: {page: string}
 }
 
+type Planet = {name: string, url: string};
+
 export async function getServerSideProps(props: ServerSideProps){
     let planetList: {name: string, id: string}[] = []
     const res = await fetch(`https://swapi.dev/api/planets/?page=${props.params.page}`);
     const json = await res.json();
 
-    json.results.forEach((planet:any) => {
+    json.results.forEach((planet:Planet) => {
               let idArr = planet.url.split("/");
               planetList.push({name:planet.name, id:idArr[5]})
     })

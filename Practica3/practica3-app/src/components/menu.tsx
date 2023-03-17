@@ -17,8 +17,8 @@ const Menu = (props: PageProps) => {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        const handleStart = (url:any) => (url !== router.asPath) && setLoading(true);
-        const handleComplete = (url:any) => (url === router.asPath) && setLoading(false);
+        const handleStart = (url:string) => (url !== router.asPath) && setLoading(true);
+        const handleComplete = (url:string) => (url === router.asPath) && setLoading(false);
 
         router.events.on('routeChangeStart', handleStart)
         router.events.on('routeChangeComplete', handleComplete)
