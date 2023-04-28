@@ -1,9 +1,8 @@
-import { CharName } from "@/styles/myStyledComponents";
+
+import CharData from "@/components/characterData";
 import { getClientSSR } from "@/utils/apolloclient";
 import { gql } from "@apollo/client"
-import { useRouter } from "next/router";
-import Image from "next/image";
-import Link from "next/link";
+
 
 type Char = {character:{
   name: string, 
@@ -103,33 +102,10 @@ export const getStaticProps = async (props: ServerSideProps) => {
 }
 
 export default function Char(props: {data: Char}) {
-
-  const router = useRouter()
-
-  if(router.isFallback){
     return(
-    <>
-      <h1>Loading</h1>
-    </>
+      <>
+      <CharData data={props.data}></CharData>
+      </>
     )
-  }
   
-  return (
-    <div>
-        <Image src={props.data.character.image} alt={props.data.character.name} width={400} height={400}></Image>
-        <CharName>name: {props.data.character.name}</CharName>
-        <CharName>location: <Link className="greenLink" href={`/location/${props.data.character.location.id}`}>{props.data.character.location.name}</Link></CharName>
-        <CharName>gender: {props.data.character.gender}</CharName>
-        <CharName>episodes:</CharName>
-        {
-          props.data.character.episode.map(ep => {
-            return (
-              <>
-                <li><Link className="greenLink" href={`/episode/${ep.id}`}>{ep.name}</Link></li>
-              </>
-            )
-          })
-        }
-    </div>
-  )
 }

@@ -2,6 +2,7 @@ import Loader from "@/components/loader";
 import { CharName } from "@/styles/myStyledComponents";
 import { gql, useQuery } from "@apollo/client"
 import Link from "next/link";
+import { useState } from "react";
 
 type GraphQLResponse = {episode:{
     name: string, 
@@ -29,7 +30,9 @@ export default function EpisodeData(props:{id:string}){
         }
     });
 
-    if(loading){
+    const [serverLoading, setServerLoading] = useState<boolean>(false);
+
+    if(loading || serverLoading){
         return(
             <>
             <Loader></Loader>
@@ -54,7 +57,7 @@ export default function EpisodeData(props:{id:string}){
                 data?.episode.characters.map(char => {
                     return (
                     <>
-                        <li><Link className="greenLink" href={`/character/${char.id}`}>{char.name}</Link></li>
+                        <li><Link onClick={() => setServerLoading(true)} className="greenLink" href={`/character/${char.id}`}>{char.name}</Link></li>
                     </>
                     )
                 })

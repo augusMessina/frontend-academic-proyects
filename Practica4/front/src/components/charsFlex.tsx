@@ -16,6 +16,8 @@ export default function CharsFlex() {
     const [searchName, setSearchName] = useState<string>("");
     const [inputName, setInputName] = useState<string>("");
 
+    const [serverLoading, setServerLoading] = useState<boolean>(false);
+
     const query = gql`
         query characters($page: Int, $searchName: String){
             characters(page: $page, filter:{name: $searchName}){
@@ -39,7 +41,7 @@ export default function CharsFlex() {
         }
     });
 
-    if(loading){
+    if(loading || serverLoading){
         return(
             <>
             <Loader></Loader>
@@ -68,7 +70,7 @@ export default function CharsFlex() {
         {
             data?.characters.results.map(char => (
                 <>
-                <CharDiv>
+                <CharDiv onClick={() => setServerLoading(true)}>
                     <Link className="link" href={`/character/${char.id}`}>
                         <Image src={char.image} alt={char.name} width={300} height={300}></Image>
                         <CharName>{char.name}</CharName>

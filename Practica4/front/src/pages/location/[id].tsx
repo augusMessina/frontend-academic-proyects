@@ -1,8 +1,8 @@
-import { CharName } from "@/styles/myStyledComponents";
+
+import LocationData from "@/components/locationData";
 import { getClientSSR } from "@/utils/apolloclient";
 import { gql } from "@apollo/client"
-import { useRouter } from "next/router";
-import Link from "next/link";
+
 
 type Location = {location:{
   name: string, 
@@ -41,31 +41,9 @@ export const getServerSideProps = async (props: ServerSideProps) => {
 }
 
 export default function Char(props: {data: Location}) {
-
-  const router = useRouter()
-
-  if(router.isFallback){
     return(
-    <>
-      <h1>Loading</h1>
-    </>
+        <>
+        <LocationData data={props.data}></LocationData>
+        </>
     )
-  }
-  
-  return (
-    <div>
-        <CharName>name: {props.data.location.name}</CharName>
-        <CharName>dimension: {props.data.location.dimension}</CharName>
-        <CharName>residents:</CharName>
-        {
-          props.data.location.residents.map(char => {
-            return (
-              <>
-                <li><Link className="greenLink" href={`/character/${char.id}`}>{char.name}</Link></li>
-              </>
-            )
-          })
-        }
-    </div>
-  )
 }
