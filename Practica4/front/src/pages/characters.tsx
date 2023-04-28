@@ -17,8 +17,7 @@ export default function CharClient() {
 
     const [prev, setPrev] = useState<number|null>(null);
     const [next, setNext] = useState<number|null>(null);
-
-    const [inputValue, setInputValue] = useState<string>("");
+    
     const [searchName, setSearchName] = useState<string>("");
   
     const fetchChar = async (page: number, name: string) => {

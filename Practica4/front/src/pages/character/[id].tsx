@@ -95,8 +95,6 @@ export const getStaticProps = async (props: ServerSideProps) => {
     }
   }
 
-  console.log(data.character.location.id)
-
   return {
     props: {
       data: data
