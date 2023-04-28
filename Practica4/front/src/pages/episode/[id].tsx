@@ -21,9 +21,9 @@ export const getServerSideProps = async (props: ServerSideProps) => {
         id: props.params.id
       }
     }
-  }
+}
   
-  export default function Episode(props: {id: string}) {
+export default function Episode(props: {id: string}) {
 
     const [episode, setEpisode] = useState<{
         name: string, 
