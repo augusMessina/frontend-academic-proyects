@@ -88,7 +88,7 @@ export const getStaticProps = async (props: ServerSideProps) => {
     query
   });
 
-  if(!data.character.name){
+  if(!data.character){
     return {
       notFound: true,
     }
