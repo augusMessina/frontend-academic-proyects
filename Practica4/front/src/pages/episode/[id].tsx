@@ -1,6 +1,6 @@
 import { ButtonContainer, CharDiv, CharName, CharsWrap, CurrentPage } from "@/styles/myStyledComponents";
 import { clientCSR } from "@/utils/apolloclient";
-import { gql } from "@apollo/client"
+import { gql, useQuery } from "@apollo/client"
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -25,50 +25,48 @@ export const getServerSideProps = async (props: ServerSideProps) => {
   
 export default function Episode(props: {id: string}) {
 
-    const [episode, setEpisode] = useState<{
-        name: string, 
-        air_date: string, 
-        characters: {name: string, id: string}[]
-    }>();
-
-    const fetchChar = async (id: string) => {
-        const query = gql`
-        query{
-            episode(id: ${id}){
-              name,
-              air_date,
-              characters{
-                name,
-                id
-              }
-            }
+    const query = gql`
+    query episode($id: ID!){
+        episode(id: $id){
+          name,
+          air_date,
+          characters{
+            name,
+            id
           }
+        }
+      }
         `;
 
-        const {data} = await clientCSR.query<GraphQLResponse>({
-            query
-        });
+    const { data, loading, error } = useQuery<GraphQLResponse>(query, {
+        variables:{
+            id: props.id
+        }
+    });
 
-        setEpisode(data.episode)
-    }
-
-    useEffect(() => {fetchChar(props.id)}, []);
-
-    if(!episode?.name){
+    if(loading){
         return(
             <>
-              <h1>Loading</h1>
+            <CharName>Loading..</CharName>
+            </>
+        )
+    }
+
+    if(error){
+        return(
+            <>
+            <CharName>Ehmmm, looks like something went wrong :D</CharName>
             </>
         )
     }
 
     return (
         <>
-            <CharName>title: {episode.name}</CharName>
-            <CharName>air date: {episode.air_date}</CharName>
+            <CharName>title: {data?.episode.name}</CharName>
+            <CharName>air date: {data?.episode.air_date}</CharName>
             <CharName>characters:</CharName>
             {
-                episode.characters.map(char => {
+                data?.episode.characters.map(char => {
                     return (
                     <>
                         <li><Link className="greenLink" href={`/character/${char.id}`}>{char.name}</Link></li>

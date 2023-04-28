@@ -1,6 +1,6 @@
 import { ButtonContainer, CharDiv, CharName, CharsWrap, CurrentPage } from "@/styles/myStyledComponents";
 import { clientCSR } from "@/utils/apolloclient";
-import { gql } from "@apollo/client"
+import { gql, useQuery } from "@apollo/client"
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -13,17 +13,12 @@ export default function CharClient() {
 
     const [page, setPage] = useState<number>(1);
 
-    const [chars, setChars] = useState<{name: string, image: string, id: string}[]>([]);
-
-    const [prev, setPrev] = useState<number|null>(null);
-    const [next, setNext] = useState<number|null>(null);
-    
     const [searchName, setSearchName] = useState<string>("");
-  
-    const fetchChar = async (page: number, name: string) => {
-        const query = gql`
-        query{
-            characters(page: ${page}, filter:{name: "${name}"}){
+    const [inputName, setInputName] = useState<string>("");
+
+    const query = gql`
+        query characters($page: Int, $searchName: String){
+            characters(page: $page, filter:{name: $searchName}){
               results{
                 name,
                 image,
@@ -37,21 +32,25 @@ export default function CharClient() {
           }
         `;
 
-        const {data} = await clientCSR.query<GraphQLResponse>({
-            query
-        });
+    const { data, loading, error } = useQuery<GraphQLResponse>(query, {
+        variables:{
+            page,
+            searchName
+        }
+    });
 
-        setChars(data.characters.results);
-        setPrev(data.characters.info.prev);
-        setNext(data.characters.info.next);
-    }
-
-    useEffect(() => {fetchChar(page, searchName)}, [page]);
-
-    if(chars.length === 0){
+    if(loading){
         return(
             <>
-              <h1>Loading</h1>
+            <CharName>Loading..</CharName>
+            </>
+        )
+    }
+
+    if(error){
+        return(
+            <>
+            <CharName>Ehmmm, looks like something went wrong :D</CharName>
             </>
         )
     }
@@ -59,18 +58,15 @@ export default function CharClient() {
     return (
         <>
         <ButtonContainer>
-            <input placeholder="Rick.." onChange={(e) => {setSearchName(e.target.value)}}></input>
+            <input placeholder="Rick.." onChange={(e) => {setInputName(e.target.value)}}></input>
             <button onClick={() => {
-                if(page === 1){
-                    fetchChar(page, searchName);
-                } else {
-                    setPage(1);
-                }
+                setPage(1);
+                setSearchName(inputName);
             }}>search</button>
         </ButtonContainer>
         <CharsWrap>
         {
-            chars.map(char => (
+            data?.characters.results.map(char => (
                 <>
                 <CharDiv>
                     <Link className="link" href={`/character/${char.id}`}>
@@ -84,11 +80,11 @@ export default function CharClient() {
         </CharsWrap>
         <ButtonContainer>
             {
-                prev && <button onClick={() => setPage(prev)}>prev</button>
+                data?.characters.info.prev && <button onClick={() => setPage(data.characters.info.prev)}>prev</button>
             }
             <CurrentPage>{page}</CurrentPage>
             {
-                next && <button onClick={() => setPage(next)}>next</button>
+                data?.characters.info.next && <button onClick={() => setPage(data.characters.info.next)}>next</button>
             }
         </ButtonContainer>
         </>
