@@ -1,6 +1,7 @@
 import styled from "styled-components"
 
 export const CharsWrap = styled.div`
+    margin: 30px;
     padding: 10px;
     align-self: center;
     align-items: flex-start;
