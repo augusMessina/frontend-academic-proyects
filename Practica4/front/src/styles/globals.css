@@ -11,6 +11,17 @@ body{
     color: white;
     text-decoration: none;
     text-align: center;
+    font-weight: 600;
+    font-size: 30px; 
+    margin: 0; 
+}
+
+.greenLink{
+    color: greenyellow;
+    text-align: center;
+    font-weight: 600;
+    font-size: 30px; 
+    margin: 0; 
 }
 
 input{
@@ -39,4 +50,8 @@ button{
 button:hover{
     background: greenyellow;
     color: black;
+}
+
+li{
+    color: white;
 }

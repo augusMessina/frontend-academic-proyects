@@ -2,8 +2,16 @@ import { CharName } from "@/styles/myStyledComponents";
 import { getClientSSR } from "@/utils/apolloclient";
 import { gql } from "@apollo/client"
 import { useRouter } from "next/router";
+import Image from "next/image";
+import Link from "next/link";
 
-type Char = {character:{name: string, location:{name:string}, gender: string}};
+type Char = {character:{
+  name: string, 
+  location:{name:string, id: string}, 
+  gender: string,
+  image: string,
+  episode: {name: string, id: string}[]
+}};
 type Chars = {characters:{results: Array<{id: string}>, info:{next: number}}};
 
 type ServerSideProps = {
@@ -50,8 +58,6 @@ export const getStaticPaths = async () => {
 
   // await fetchIds(1);
 
-  console.log(paths)
-
   return {
     paths,
     fallback: true
@@ -65,9 +71,15 @@ export const getStaticProps = async (props: ServerSideProps) => {
         character(id: ${props.params.id}){
             name,
             location{
-              name
+              name,
+              id
             }
-            gender
+            gender,
+            image,
+            episode{
+              name,
+              id
+            },
         }
     }
   `;
@@ -76,6 +88,14 @@ export const getStaticProps = async (props: ServerSideProps) => {
   const {data} = await client.query<Char>({
     query
   });
+
+  if(!data.character.name){
+    return {
+      notFound: true,
+    }
+  }
+
+  console.log(data.character.location.id)
 
   return {
     props: {
@@ -98,9 +118,20 @@ export default function Char(props: {data: Char}) {
   
   return (
     <div>
+        <Image src={props.data.character.image} alt={props.data.character.name} width={400} height={400}></Image>
         <CharName>name: {props.data.character.name}</CharName>
-        <CharName>location: {props.data.character.location.name}</CharName>
+        <CharName>location: <Link className="greenLink" href={`/location/${props.data.character.location.id}`}>{props.data.character.location.name}</Link></CharName>
         <CharName>gender: {props.data.character.gender}</CharName>
+        <CharName>episodes:</CharName>
+        {
+          props.data.character.episode.map(ep => {
+            return (
+              <>
+                <li><Link className="greenLink" href={`/episode/${ep.id}`}>{ep.name}</Link></li>
+              </>
+            )
+          })
+        }
     </div>
   )
 }
