@@ -1,9 +1,9 @@
+import Loader from "@/components/loader";
 import { ButtonContainer, CharDiv, CharName, CharsWrap, CurrentPage } from "@/styles/myStyledComponents";
-import { clientCSR } from "@/utils/apolloclient";
 import { gql, useQuery } from "@apollo/client"
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 type GraphQLResponse = {characters:{results: Array<{name: string, image: string, id: string}>, info:{prev: number, next: number}}};
@@ -42,7 +42,7 @@ export default function CharClient() {
     if(loading){
         return(
             <>
-            <CharName>Loading..</CharName>
+            <Loader></Loader>
             </>
         )
     }

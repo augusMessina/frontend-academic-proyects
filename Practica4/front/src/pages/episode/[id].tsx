@@ -1,9 +1,8 @@
-import { ButtonContainer, CharDiv, CharName, CharsWrap, CurrentPage } from "@/styles/myStyledComponents";
-import { clientCSR } from "@/utils/apolloclient";
+import Loader from "@/components/loader";
+import { CharName } from "@/styles/myStyledComponents";
 import { gql, useQuery } from "@apollo/client"
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+
 
 type ServerSideProps = {
     params: {id: string}
@@ -47,7 +46,7 @@ export default function Episode(props: {id: string}) {
     if(loading){
         return(
             <>
-            <CharName>Loading..</CharName>
+            <Loader></Loader>
             </>
         )
     }

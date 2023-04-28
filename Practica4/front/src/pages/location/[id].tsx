@@ -2,7 +2,6 @@ import { CharName } from "@/styles/myStyledComponents";
 import { getClientSSR } from "@/utils/apolloclient";
 import { gql } from "@apollo/client"
 import { useRouter } from "next/router";
-import Image from "next/image";
 import Link from "next/link";
 
 type Location = {location:{
